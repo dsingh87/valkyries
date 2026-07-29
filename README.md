@@ -2,7 +2,7 @@
 
 An end-to-end basketball decision-support system for the Golden State Valkyries. The project updates after every WNBA game, estimates matchup- and lineup-specific outcomes, tests rotation scenarios for upcoming opponents, and produces a concise evidence-grounded scouting brief.
 
-This is deliberately not a generic win predictor, player-ranking exercise, or shot-chart dashboard. The portfolio value is the complete path from unreliable public event data to an evaluated model and a tool a basketball stakeholder could use.
+This is deliberately not a generic win predictor, player-ranking exercise, or shot-chart dashboard. Its value is the complete path from unreliable public event data to an evaluated model and a tool a basketball stakeholder could use.
 
 ## Current basketball question
 
@@ -136,7 +136,7 @@ All validation is time-aware. Random train/test splits are prohibited.
 - Publish failures and prediction revisions after each Valkyries game.
 - Freeze a pregame artifact before tipoff so the project cannot rewrite history.
 
-## Portfolio deliverables
+## Project deliverables
 
 1. Reproducible repository with typed Python, SQL models, tests, CI, and one-command updates.
 2. Data dictionary and lineage diagram.
@@ -181,13 +181,12 @@ All validation is time-aware. Random train/test splits are prohibited.
 - Building a chatbot over box scores.
 - Presenting correlation as a causal rotation effect.
 
-## Skill signal
+## System capabilities
 
-This single project demonstrates the combination currently emphasized in basketball analytics hiring:
+The project brings together the capabilities required for a reliable basketball decision-support system:
 
 - **Data engineering:** ingestion, event modeling, SQL, validation, orchestration, and reproducibility.
 - **Applied statistics and ML:** opponent adjustment, partial pooling, sparse-data handling, calibration, and time-aware validation.
 - **Decision science:** constrained scenarios and uncertainty-aware recommendations.
 - **AI engineering:** retrieval, structured generation, grounding, and evaluation.
 - **Basketball communication:** short decision-ready briefs rather than notebook dumps.
-
