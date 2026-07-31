@@ -1,6 +1,11 @@
 import json
+from collections.abc import Mapping
 from html.parser import HTMLParser
 from typing import Any
+
+
+class PlayByPlayValidationError(ValueError):
+    """Raised when play-by-play data violates the ingestion contract."""
 
 
 class _NextDataParser(HTMLParser):
@@ -46,3 +51,17 @@ def extract_play_by_play(html: str) -> dict[str, Any]:
         raise ValueError("Play-by-play data must be an object")
 
     return play_by_play
+
+
+def validate_play_by_play(
+    play_by_play: Mapping[str, Any],
+    *,
+    expected_game_id: str,
+) -> None:
+    returned_game_id = play_by_play.get("gameId")
+
+    if returned_game_id != expected_game_id:
+        raise PlayByPlayValidationError(
+            f"Play-by-play game {returned_game_id!r} "
+            f"does not match requested game {expected_game_id}"
+        )
