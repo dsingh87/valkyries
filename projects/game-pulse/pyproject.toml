@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "valkyries-game-pulse"
+version = "0.1.0"
+description = "Possession-level win probability and leverage for the Golden State Valkyries."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "fastapi>=0.117,<1",
+    "jinja2>=3.1,<4",
+    "pydantic>=2.10,<3",
+]
+
+[project.optional-dependencies]
+database = ["psycopg[binary]>=3.2,<4"]
+modeling = [
+    "keras>=3.12,<4",
+    "numpy>=2.0,<3",
+    "pandas>=2.2,<3",
+    "scikit-learn>=1.6,<2",
+    "tensorflow>=2.21,<2.22",
+    "xgboost>=3.0,<4",
+]
+dev = [
+    "httpx>=0.28,<1",
+    "mypy>=1.15,<2",
+    "pytest>=8.3,<9",
+    "ruff>=0.11,<1",
+    "uvicorn>=0.34,<1",
+]
+
+[project.scripts]
+game-pulse = "game_pulse.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+game_pulse = ["published/*.json", "published/*.sha256", "static/*", "templates/*.html"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+markers = ["modeling: requires the optional modeling dependencies"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["game_pulse"]
+
+[[tool.mypy.overrides]]
+module = [
+    "keras", "keras.*", "numpy", "numpy.*", "pandas", "pandas.*",
+    "psycopg", "psycopg.*", "sklearn", "sklearn.*", "xgboost", "xgboost.*",
+]
+ignore_missing_imports = true

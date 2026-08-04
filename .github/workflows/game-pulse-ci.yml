@@ -1,0 +1,46 @@
+name: Game Pulse CI
+
+on:
+  push:
+    paths:
+      - "projects/game-pulse/**"
+      - ".github/workflows/game-pulse-ci.yml"
+  pull_request:
+    paths:
+      - "projects/game-pulse/**"
+      - ".github/workflows/game-pulse-ci.yml"
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/game-pulse
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: projects/game-pulse/pyproject.toml
+      - run: python -m pip install -e '.[dev]'
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy src
+      - run: pytest -m 'not modeling'
+      - run: python -c "from api.index import app; assert app.title == 'Valkyries Game Pulse'"
+
+  model-smoke:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/game-pulse
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: projects/game-pulse/pyproject.toml
+      - run: python -m pip install -e '.[dev,modeling]'
+      - run: pytest -m modeling tests/test_data.py tests/test_modeling.py

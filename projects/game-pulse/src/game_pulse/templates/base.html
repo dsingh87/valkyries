@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Out-of-time possession win probability for the 2026 Golden State Valkyries">
+    <title>{% block title %}Valkyries Game Pulse{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', path='/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', path='/app.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">V</span>
+        <span><strong>Game Pulse</strong><small>Golden State Valkyries · 2026</small></span>
+      </a>
+      <span class="status-pill">Out-of-time model audit</span>
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+    <footer>
+      <span>Public play-by-play · frozen through {{ artifact.data_cutoff_at.strftime('%b %-d, %Y') }}</span>
+      <span>Model run <code>{{ artifact.model_card.model_run_id }}</code></span>
+    </footer>
+  </body>
+</html>
