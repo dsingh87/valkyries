@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Valkyries matchup intelligence for the Toronto rematch">
+    <title>{% block title %}Valkyries Matchup Intelligence{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', path='/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', path='/app.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Valkyries Matchup Intelligence home">
+        <span class="brand-mark" aria-hidden="true">V</span>
+        <span><strong>Matchup Intelligence</strong><small>Golden State vs. Toronto · Aug 4</small></span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a class="{{ 'active' if active == 'brief' else '' }}" href="/">Pregame brief</a>
+        <a class="{{ 'active' if active == 'scenarios' else '' }}" href="/scenarios">Scenario explorer</a>
+        <a class="{{ 'active' if active == 'model' else '' }}" href="/model-data">Model &amp; data</a>
+      </nav>
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+    <footer>
+      <span>Frozen before tipoff · no postgame rewriting</span>
+      <span>Model run <code>{{ brief.model_run.model_run_id }}</code></span>
+    </footer>
+  </body>
+</html>

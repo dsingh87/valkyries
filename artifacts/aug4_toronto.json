@@ -1,0 +1,1378 @@
+{
+  "schema_version": "1.0",
+  "target_game_id": "401857114",
+  "matchup": "Toronto Tempo at Golden State Valkyries",
+  "scheduled_at": "2026-08-05T02:00:00Z",
+  "data_cutoff_at": "2026-08-03T08:00:00Z",
+  "frozen_at": "2026-08-04T04:19:18.604265Z",
+  "question": "Which feasible Golden State lineup adjustments project to improve half-court offense against Toronto without materially weakening defense?",
+  "direct_answer": "8 observed Golden State lineup groups clear the default defensive-risk screen. The three highest-ranked groups are candidates for bounded stints, not prescriptions for a coaching rotation.",
+  "defense_tolerance_pp100": 2.0,
+  "model_run": {
+    "model_run_id": "4bad26019ec2f6aab85f27a9",
+    "cutoff_at": "2026-08-03T08:00:00Z",
+    "data_hash": "414eb42e00d146c19407872b5bd7fee441fd89da4bce22a52d614578fa9c4522",
+    "feature_schema_hash": "edb8c9809bcc2f3c9e868ae01f54c8926625fd099b0fb6e8b521101982ad4a2c",
+    "algorithm": "sklearn_tweedie",
+    "metrics": {
+      "baseline_mae": 1.085496281974664,
+      "baseline_rmse": 1.149709698199624,
+      "baseline_calibration_error": 0.04774703773463739,
+      "baseline_game_rating_mae": 10.015793043324502,
+      "xgboost_mae": 1.0861317414917324,
+      "xgboost_rmse": 1.149740262534861,
+      "xgboost_calibration_error": 0.04129999086963746,
+      "xgboost_game_rating_mae": 9.982459891872834,
+      "xgboost_wins_gate": false,
+      "pymc_interval_coverage_80": 0.6714208584540629
+    },
+    "status": "complete",
+    "created_at": "2026-08-04T04:18:41.431044Z"
+  },
+  "recommendations": [
+    {
+      "recommendation_id": "535b3339a911343d37fda68a",
+      "rank": 1,
+      "prediction_id": "7a79b3a6b9914a1dc8ac324c",
+      "adjustment": "Test the observed five-player group of Kayla Thornton, Gabby Williams, Cecilia Zandalasini, Veronica Burton, Janelle Salaun in a bounded stint.",
+      "evidence": "Toronto-adjusted, shrunk half-court estimate: 123.7 points scored and 74.9 points allowed per 100 possessions; 37 validated lineup possessions support both sides, with the July 8 and August 2 matchups included in the opponent adjustment.",
+      "confidence": "moderate",
+      "caveat": "This is a partial-pooling observational estimate, not a causal claim about changing the rotation. Opponent assignments and unobserved tactical context may explain part of the difference."
+    },
+    {
+      "recommendation_id": "c6584fa745a8415a0a10673b",
+      "rank": 2,
+      "prediction_id": "4d841e721a3706d7d4299987",
+      "adjustment": "Test the observed five-player group of Gabby Williams, Kaila Charles, Veronica Burton, Laeticia Amihere, Janelle Salaun in a bounded stint.",
+      "evidence": "Toronto-adjusted, shrunk half-court estimate: 123.6 points scored and 84.2 points allowed per 100 possessions; 23 validated lineup possessions support both sides, with the July 8 and August 2 matchups included in the opponent adjustment.",
+      "confidence": "moderate",
+      "caveat": "This is a partial-pooling observational estimate, not a causal claim about changing the rotation. Opponent assignments and unobserved tactical context may explain part of the difference."
+    },
+    {
+      "recommendation_id": "a10b6605c78f36c618d27260",
+      "rank": 3,
+      "prediction_id": "684df2f24ba6dd088e14fa38",
+      "adjustment": "Test the observed five-player group of Tiffany Hayes, Kayla Thornton, Kaila Charles, Veronica Burton, Laeticia Amihere in a bounded stint.",
+      "evidence": "Toronto-adjusted, shrunk half-court estimate: 121.4 points scored and 84.1 points allowed per 100 possessions; 10 validated lineup possessions support both sides, with the July 8 and August 2 matchups included in the opponent adjustment.",
+      "confidence": "directional",
+      "caveat": "This is a partial-pooling observational estimate, not a causal claim about changing the rotation. Opponent assignments and unobserved tactical context may explain part of the difference."
+    }
+  ],
+  "scenarios": [
+    {
+      "prediction_id": "7a79b3a6b9914a1dc8ac324c",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "3142328",
+        "4257500",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Gabby Williams",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 123.7,
+      "offense_interval_80": [
+        105.9,
+        141.5
+      ],
+      "offensive_lift_pp100": 12.2,
+      "expected_defense_pp100": 74.9,
+      "defense_interval_80": [
+        60.8,
+        89.0
+      ],
+      "defensive_change_pp100": -22.7,
+      "guardrail_probability": 0.9877,
+      "sample_possessions": 37,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "4d841e721a3706d7d4299987",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "3142328",
+        "4065780",
+        "4398935",
+        "4432834",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Gabby Williams",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 123.6,
+      "offense_interval_80": [
+        104.1,
+        143.2
+      ],
+      "offensive_lift_pp100": 12.1,
+      "expected_defense_pp100": 84.2,
+      "defense_interval_80": [
+        67.3,
+        101.2
+      ],
+      "defensive_change_pp100": -13.4,
+      "guardrail_probability": 0.8774,
+      "sample_possessions": 23,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "684df2f24ba6dd088e14fa38",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "4065780",
+        "4398935",
+        "4432834"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Laeticia Amihere"
+      ],
+      "expected_offense_pp100": 121.4,
+      "offense_interval_80": [
+        97.5,
+        145.2
+      ],
+      "offensive_lift_pp100": 9.8,
+      "expected_defense_pp100": 84.1,
+      "defense_interval_80": [
+        64.2,
+        103.9
+      ],
+      "defensive_change_pp100": -13.6,
+      "guardrail_probability": 0.8426,
+      "sample_possessions": 10,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "322b3dd2937d6687b3610d0c",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "3142328",
+        "4257500",
+        "4398935",
+        "4432834"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Gabby Williams",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Laeticia Amihere"
+      ],
+      "expected_offense_pp100": 116.8,
+      "offense_interval_80": [
+        98.7,
+        134.8
+      ],
+      "offensive_lift_pp100": 5.2,
+      "expected_defense_pp100": 85.7,
+      "defense_interval_80": [
+        69.4,
+        102.0
+      ],
+      "defensive_change_pp100": -11.9,
+      "guardrail_probability": 0.8627,
+      "sample_possessions": 28,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "ba8360154da21926de2ce809",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2590093",
+        "4065780",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kiah Stokes",
+        "Kaila Charles",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 115.4,
+      "offense_interval_80": [
+        100.8,
+        130.1
+      ],
+      "offensive_lift_pp100": 3.9,
+      "expected_defense_pp100": 88.8,
+      "defense_interval_80": [
+        75.7,
+        101.9
+      ],
+      "defensive_change_pp100": -8.8,
+      "guardrail_probability": 0.8555,
+      "sample_possessions": 60,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "886c51f0a5b19e50bb9989ec",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "2590093",
+        "3142328",
+        "4065780",
+        "4398935"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Kaila Charles",
+        "Veronica Burton"
+      ],
+      "expected_offense_pp100": 113.9,
+      "offense_interval_80": [
+        102.9,
+        124.9
+      ],
+      "offensive_lift_pp100": 2.3,
+      "expected_defense_pp100": 87.9,
+      "defense_interval_80": [
+        78.1,
+        97.6
+      ],
+      "defensive_change_pp100": -9.8,
+      "guardrail_probability": 0.9392,
+      "sample_possessions": 127,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "92e987f3d4af27a673cc420a",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "2590093",
+        "3142328",
+        "4398935",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Veronica Burton",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 100.4,
+      "offense_interval_80": [
+        81.7,
+        119.1
+      ],
+      "offensive_lift_pp100": -11.2,
+      "expected_defense_pp100": 80.9,
+      "defense_interval_80": [
+        64.6,
+        97.2
+      ],
+      "defensive_change_pp100": -16.8,
+      "guardrail_probability": 0.9299,
+      "sample_possessions": 22,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "7d24fed5208962b1a2e8c3a5",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2590093",
+        "4065780",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kiah Stokes",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 93.5,
+      "offense_interval_80": [
+        75.0,
+        111.9
+      ],
+      "offensive_lift_pp100": -18.1,
+      "expected_defense_pp100": 86.7,
+      "defense_interval_80": [
+        68.3,
+        105.1
+      ],
+      "defensive_change_pp100": -10.9,
+      "guardrail_probability": 0.8153,
+      "sample_possessions": 17,
+      "meets_guardrail": true
+    },
+    {
+      "prediction_id": "74112c56bc0461d6e5b5afdf",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "4065780",
+        "4257500",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kaila Charles",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 143.2,
+      "offense_interval_80": [
+        117.6,
+        168.7
+      ],
+      "offensive_lift_pp100": 31.6,
+      "expected_defense_pp100": 98.3,
+      "defense_interval_80": [
+        76.9,
+        119.8
+      ],
+      "defensive_change_pp100": 0.7,
+      "guardrail_probability": 0.5307,
+      "sample_possessions": 10,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "66530e8ba1fcc7ed325672af",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "3142328",
+        "4065780",
+        "4398935",
+        "4432834"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Gabby Williams",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Laeticia Amihere"
+      ],
+      "expected_offense_pp100": 142.1,
+      "offense_interval_80": [
+        117.0,
+        167.3
+      ],
+      "offensive_lift_pp100": 30.6,
+      "expected_defense_pp100": 103.9,
+      "defense_interval_80": [
+        82.2,
+        125.7
+      ],
+      "defensive_change_pp100": 6.3,
+      "guardrail_probability": 0.3998,
+      "sample_possessions": 11,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "610c25b49fdb21f015aedc3a",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2590093",
+        "4065780",
+        "4398935",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Kiah Stokes",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 134.1,
+      "offense_interval_80": [
+        111.7,
+        156.5
+      ],
+      "offensive_lift_pp100": 22.5,
+      "expected_defense_pp100": 96.3,
+      "defense_interval_80": [
+        76.9,
+        115.7
+      ],
+      "defensive_change_pp100": -1.4,
+      "guardrail_probability": 0.5883,
+      "sample_possessions": 17,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "d14323f88be75f1b552a8df5",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "4065780",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Kaila Charles",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 125.7,
+      "offense_interval_80": [
+        110.8,
+        140.6
+      ],
+      "offensive_lift_pp100": 14.1,
+      "expected_defense_pp100": 98.4,
+      "defense_interval_80": [
+        85.1,
+        111.6
+      ],
+      "defensive_change_pp100": 0.7,
+      "guardrail_probability": 0.5493,
+      "sample_possessions": 67,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "d43046da1c10a3262bb17c3c",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "3142328",
+        "4398935",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Gabby Williams",
+        "Veronica Burton",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 125.4,
+      "offense_interval_80": [
+        102.1,
+        148.7
+      ],
+      "offensive_lift_pp100": 13.8,
+      "expected_defense_pp100": 101.1,
+      "defense_interval_80": [
+        80.7,
+        121.4
+      ],
+      "defensive_change_pp100": 3.4,
+      "guardrail_probability": 0.4642,
+      "sample_possessions": 13,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "12d57e1f9bf0e51c9537cd7b",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "4065780",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 123.0,
+      "offense_interval_80": [
+        104.8,
+        141.2
+      ],
+      "offensive_lift_pp100": 11.4,
+      "expected_defense_pp100": 100.8,
+      "defense_interval_80": [
+        83.9,
+        117.7
+      ],
+      "defensive_change_pp100": 3.1,
+      "guardrail_probability": 0.4657,
+      "sample_possessions": 33,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "7a0961373d49201ab80eff6b",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "4065780",
+        "4257500",
+        "4398935",
+        "4432834",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kaila Charles",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 122.7,
+      "offense_interval_80": [
+        102.6,
+        142.8
+      ],
+      "offensive_lift_pp100": 11.2,
+      "expected_defense_pp100": 100.9,
+      "defense_interval_80": [
+        82.3,
+        119.5
+      ],
+      "defensive_change_pp100": 3.3,
+      "guardrail_probability": 0.4651,
+      "sample_possessions": 23,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "893df93af7d046b77f492b5d",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "4065780",
+        "4398935",
+        "4432834",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 121.0,
+      "offense_interval_80": [
+        100.9,
+        141.2
+      ],
+      "offensive_lift_pp100": 9.5,
+      "expected_defense_pp100": 96.7,
+      "defense_interval_80": [
+        78.3,
+        115.0
+      ],
+      "defensive_change_pp100": -1.0,
+      "guardrail_probability": 0.5819,
+      "sample_possessions": 22,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "40c45e2b4d2346819b0053b7",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2590093",
+        "3142328",
+        "4065780",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 119.9,
+      "offense_interval_80": [
+        101.8,
+        138.0
+      ],
+      "offensive_lift_pp100": 8.4,
+      "expected_defense_pp100": 93.9,
+      "defense_interval_80": [
+        77.6,
+        110.2
+      ],
+      "defensive_change_pp100": -3.8,
+      "guardrail_probability": 0.6747,
+      "sample_possessions": 33,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "9e6fde8ecf84b7e3dad25df1",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "3142328",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Gabby Williams",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 119.1,
+      "offense_interval_80": [
+        100.4,
+        137.8
+      ],
+      "offensive_lift_pp100": 7.6,
+      "expected_defense_pp100": 100.8,
+      "defense_interval_80": [
+        83.3,
+        118.3
+      ],
+      "defensive_change_pp100": 3.2,
+      "guardrail_probability": 0.4655,
+      "sample_possessions": 29,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "640cb2d5a2cf99bccd6a9a1d",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "2590093",
+        "4065780",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Kaila Charles",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 117.8,
+      "offense_interval_80": [
+        95.0,
+        140.7
+      ],
+      "offensive_lift_pp100": 6.3,
+      "expected_defense_pp100": 90.1,
+      "defense_interval_80": [
+        69.8,
+        110.3
+      ],
+      "defensive_change_pp100": -7.6,
+      "guardrail_probability": 0.7275,
+      "sample_possessions": 11,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "45aa3484cf58b41ffb99a977",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "4398935",
+        "4432834",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 115.1,
+      "offense_interval_80": [
+        95.2,
+        134.9
+      ],
+      "offensive_lift_pp100": 3.5,
+      "expected_defense_pp100": 92.6,
+      "defense_interval_80": [
+        74.8,
+        110.4
+      ],
+      "defensive_change_pp100": -5.1,
+      "guardrail_probability": 0.6944,
+      "sample_possessions": 23,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "d984aa6c1c68929c7bf3d850",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "4065780",
+        "4432834",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kaila Charles",
+        "Laeticia Amihere",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 115.1,
+      "offense_interval_80": [
+        102.7,
+        127.4
+      ],
+      "offensive_lift_pp100": 3.5,
+      "expected_defense_pp100": 108.2,
+      "defense_interval_80": [
+        96.4,
+        119.9
+      ],
+      "defensive_change_pp100": 10.5,
+      "guardrail_probability": 0.1759,
+      "sample_possessions": 99,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "590228e769ce0ba40a10a55f",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "3142328",
+        "4065780",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Gabby Williams",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 112.6,
+      "offense_interval_80": [
+        95.8,
+        129.3
+      ],
+      "offensive_lift_pp100": 1.0,
+      "expected_defense_pp100": 113.1,
+      "defense_interval_80": [
+        97.1,
+        129.2
+      ],
+      "defensive_change_pp100": 15.5,
+      "guardrail_probability": 0.1406,
+      "sample_possessions": 41,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "46e7c40b5a1679bcf9afa612",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "4065780",
+        "4398935",
+        "4432834",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Kaila Charles",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 112.4,
+      "offense_interval_80": [
+        90.1,
+        134.8
+      ],
+      "offensive_lift_pp100": 0.9,
+      "expected_defense_pp100": 114.3,
+      "defense_interval_80": [
+        92.0,
+        136.5
+      ],
+      "defensive_change_pp100": 16.6,
+      "guardrail_probability": 0.1993,
+      "sample_possessions": 12,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "39687df03f582fd24533272d",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "2590093",
+        "3142328",
+        "4065780",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Kaila Charles",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 109.7,
+      "offense_interval_80": [
+        87.6,
+        131.8
+      ],
+      "offensive_lift_pp100": -1.8,
+      "expected_defense_pp100": 109.5,
+      "defense_interval_80": [
+        87.2,
+        131.9
+      ],
+      "defensive_change_pp100": 11.9,
+      "guardrail_probability": 0.2857,
+      "sample_possessions": 11,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "456c65ff09ab9279a3bd0fd6",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2590093",
+        "4398935",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kiah Stokes",
+        "Veronica Burton",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 109.3,
+      "offense_interval_80": [
+        88.4,
+        130.3
+      ],
+      "offensive_lift_pp100": -2.2,
+      "expected_defense_pp100": 96.2,
+      "defense_interval_80": [
+        76.5,
+        115.8
+      ],
+      "defensive_change_pp100": -1.5,
+      "guardrail_probability": 0.5897,
+      "sample_possessions": 16,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "fb2f0beaeb845ad824622f53",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2590093",
+        "3142328",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 109.1,
+      "offense_interval_80": [
+        93.6,
+        124.7
+      ],
+      "offensive_lift_pp100": -2.4,
+      "expected_defense_pp100": 97.9,
+      "defense_interval_80": [
+        82.9,
+        112.8
+      ],
+      "defensive_change_pp100": 0.2,
+      "guardrail_probability": 0.5603,
+      "sample_possessions": 47,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "ae3c4d50c7b792f08a1c5797",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "2590093",
+        "3142328",
+        "4398935"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Veronica Burton"
+      ],
+      "expected_offense_pp100": 109.0,
+      "offense_interval_80": [
+        89.2,
+        128.7
+      ],
+      "offensive_lift_pp100": -2.6,
+      "expected_defense_pp100": 94.3,
+      "defense_interval_80": [
+        75.7,
+        112.8
+      ],
+      "defensive_change_pp100": -3.3,
+      "guardrail_probability": 0.644,
+      "sample_possessions": 20,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "6a485f0cb36cd8eed1b7f8a2",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "4065780",
+        "4066546",
+        "4432834",
+        "4899328",
+        "5277552"
+      ],
+      "lineup_names": [
+        "Kaila Charles",
+        "Nadia Fingall",
+        "Laeticia Amihere",
+        "Kaitlyn Chen",
+        "Juste Jocyte"
+      ],
+      "expected_offense_pp100": 107.1,
+      "offense_interval_80": [
+        84.7,
+        129.5
+      ],
+      "offensive_lift_pp100": -4.5,
+      "expected_defense_pp100": 89.8,
+      "defense_interval_80": [
+        69.2,
+        110.3
+      ],
+      "defensive_change_pp100": -7.9,
+      "guardrail_probability": 0.731,
+      "sample_possessions": 10,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "22f6701b3ee32ac33a11d15e",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "3142328",
+        "4257500",
+        "4398935",
+        "4432834",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Gabby Williams",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 107.1,
+      "offense_interval_80": [
+        84.7,
+        129.5
+      ],
+      "offensive_lift_pp100": -4.5,
+      "expected_defense_pp100": 98.3,
+      "defense_interval_80": [
+        76.9,
+        119.8
+      ],
+      "defensive_change_pp100": 0.7,
+      "guardrail_probability": 0.5307,
+      "sample_possessions": 10,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "467d0d719ff9b0282567756d",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2590093",
+        "3142328",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 107.0,
+      "offense_interval_80": [
+        85.7,
+        128.2
+      ],
+      "offensive_lift_pp100": -4.6,
+      "expected_defense_pp100": 106.2,
+      "defense_interval_80": [
+        85.1,
+        127.4
+      ],
+      "defensive_change_pp100": 8.6,
+      "guardrail_probability": 0.345,
+      "sample_possessions": 14,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "1399a4956b08011f7fe6614c",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2590093",
+        "3142328",
+        "4257500",
+        "4398935",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 106.4,
+      "offense_interval_80": [
+        91.4,
+        121.5
+      ],
+      "offensive_lift_pp100": -5.1,
+      "expected_defense_pp100": 102.0,
+      "defense_interval_80": [
+        87.0,
+        116.9
+      ],
+      "defensive_change_pp100": 4.3,
+      "guardrail_probability": 0.4211,
+      "sample_possessions": 50,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "b7e9a2f6a1daa579bfa0dadd",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "2529622",
+        "4432834",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Kayla Thornton",
+        "Laeticia Amihere",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 104.5,
+      "offense_interval_80": [
+        84.3,
+        124.7
+      ],
+      "offensive_lift_pp100": -7.1,
+      "expected_defense_pp100": 95.9,
+      "defense_interval_80": [
+        75.5,
+        116.2
+      ],
+      "defensive_change_pp100": -1.8,
+      "guardrail_probability": 0.5941,
+      "sample_possessions": 13,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "5aae66f948dc46b31e3e20e8",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "1054",
+        "4257500",
+        "4398935",
+        "4432834",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Tiffany Hayes",
+        "Cecilia Zandalasini",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 101.5,
+      "offense_interval_80": [
+        80.0,
+        123.0
+      ],
+      "offensive_lift_pp100": -10.1,
+      "expected_defense_pp100": 98.3,
+      "defense_interval_80": [
+        76.9,
+        119.8
+      ],
+      "defensive_change_pp100": 0.7,
+      "guardrail_probability": 0.5307,
+      "sample_possessions": 10,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "50e2fac616b08ee4485feeaa",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "2590093",
+        "3142328",
+        "4257500",
+        "4398935"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Cecilia Zandalasini",
+        "Veronica Burton"
+      ],
+      "expected_offense_pp100": 99.9,
+      "offense_interval_80": [
+        93.5,
+        106.4
+      ],
+      "offensive_lift_pp100": -11.6,
+      "expected_defense_pp100": 97.3,
+      "defense_interval_80": [
+        90.7,
+        103.8
+      ],
+      "defensive_change_pp100": -0.4,
+      "guardrail_probability": 0.6788,
+      "sample_possessions": 347,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "d222b28fcbf9c5beac897aca",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "4065780",
+        "4398935",
+        "4432834",
+        "4790264"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kaila Charles",
+        "Veronica Burton",
+        "Laeticia Amihere",
+        "Janelle Salaun"
+      ],
+      "expected_offense_pp100": 99.4,
+      "offense_interval_80": [
+        79.2,
+        119.6
+      ],
+      "offensive_lift_pp100": -12.1,
+      "expected_defense_pp100": 112.9,
+      "defense_interval_80": [
+        91.9,
+        133.9
+      ],
+      "defensive_change_pp100": 15.3,
+      "guardrail_probability": 0.2088,
+      "sample_possessions": 15,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "6a108d455177f764163c49b0",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "2590093",
+        "3142328",
+        "4257500",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Gabby Williams",
+        "Cecilia Zandalasini",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 88.1,
+      "offense_interval_80": [
+        68.3,
+        107.9
+      ],
+      "offensive_lift_pp100": -23.5,
+      "expected_defense_pp100": 101.2,
+      "defense_interval_80": [
+        79.7,
+        122.7
+      ],
+      "defensive_change_pp100": 3.5,
+      "guardrail_probability": 0.4635,
+      "sample_possessions": 11,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "d54f2c09d49fb6feed92e6da",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "2529622",
+        "2590093",
+        "4065780",
+        "4257500",
+        "4398935"
+      ],
+      "lineup_names": [
+        "Kayla Thornton",
+        "Kiah Stokes",
+        "Kaila Charles",
+        "Cecilia Zandalasini",
+        "Veronica Burton"
+      ],
+      "expected_offense_pp100": 87.8,
+      "offense_interval_80": [
+        72.8,
+        102.8
+      ],
+      "offensive_lift_pp100": -23.8,
+      "expected_defense_pp100": 97.4,
+      "defense_interval_80": [
+        80.9,
+        113.8
+      ],
+      "defensive_change_pp100": -0.3,
+      "guardrail_probability": 0.57,
+      "sample_possessions": 34,
+      "meets_guardrail": false
+    },
+    {
+      "prediction_id": "9a1a252bb8a463fb89bb0926",
+      "model_run_id": "4bad26019ec2f6aab85f27a9",
+      "target_game_id": "401857114",
+      "lineup_ids": [
+        "3142328",
+        "4065780",
+        "4432834",
+        "4790264",
+        "4899328"
+      ],
+      "lineup_names": [
+        "Gabby Williams",
+        "Kaila Charles",
+        "Laeticia Amihere",
+        "Janelle Salaun",
+        "Kaitlyn Chen"
+      ],
+      "expected_offense_pp100": 83.1,
+      "offense_interval_80": [
+        65.0,
+        101.1
+      ],
+      "offensive_lift_pp100": -28.5,
+      "expected_defense_pp100": 95.7,
+      "defense_interval_80": [
+        75.1,
+        116.4
+      ],
+      "defensive_change_pp100": -1.9,
+      "guardrail_probability": 0.5957,
+      "sample_possessions": 12,
+      "meets_guardrail": false
+    }
+  ],
+  "sensitivity": {
+    "0": 8,
+    "1": 8,
+    "2": 8
+  },
+  "sources": [
+    {
+      "label": "ESPN WNBA scoreboard and game summaries",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
+    },
+    {
+      "label": "Official WNBA August 4 game page",
+      "url": "https://www.wnba.com/game/tor-vs-gsv-1022600225"
+    }
+  ],
+  "caveats": [
+    "Half-court possessions use a seven-second public play-by-play proxy; sensitivity is also calculated at five and nine seconds.",
+    "Lineup estimates are observational and partially pooled. They do not identify causal rotation effects.",
+    "Feature ablations found no material holdout gain from lineup, opponent-style, or rest inputs; recommendation confidence is directional.",
+    "The nominal 80% PyMC posterior-predictive interval covered 67.1% of holdout aggregates and is not calibrated.",
+    "Public events cannot reliably identify defensive coverages, screening actions, or off-ball responsibilities.",
+    "The pregame artifact is immutable; postgame data is evaluated only through the separate audit path."
+  ]
+}

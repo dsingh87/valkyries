@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Model & Data · Valkyries Matchup Intelligence{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <p class="eyebrow">Evidence &amp; operations</p>
+  <h1>Model card and data lineage</h1>
+  <p>Every displayed estimate is tied to an immutable cutoff, source hash, feature schema, and model run.</p>
+</section>
+<section class="model-grid">
+  <article class="panel wide">
+    <p class="eyebrow">Rolling-origin holdout</p><h2>Benchmark results</h2>
+    <div class="metrics-table" role="table" aria-label="Model benchmark metrics">
+      <div class="metrics-row header" role="row"><span>Model</span><span>Poss. MAE</span><span>RMSE</span><span>Game rating MAE</span><span>Calibration</span></div>
+      <div class="metrics-row" role="row"><strong>scikit-learn Tweedie</strong><span>{{ '%.3f'|format(brief.model_run.metrics.baseline_mae or 0) }}</span><span>{{ '%.3f'|format(brief.model_run.metrics.baseline_rmse or 0) }}</span><span>{{ '%.1f'|format(brief.model_run.metrics.baseline_game_rating_mae or 0) }}</span><span>{{ '%.3f'|format(brief.model_run.metrics.baseline_calibration_error or 0) }}</span></div>
+      <div class="metrics-row" role="row"><strong>XGBoost</strong><span>{{ '%.3f'|format(brief.model_run.metrics.xgboost_mae or 0) }}</span><span>{{ '%.3f'|format(brief.model_run.metrics.xgboost_rmse or 0) }}</span><span>{{ '%.1f'|format(brief.model_run.metrics.xgboost_game_rating_mae or 0) }}</span><span>{{ '%.3f'|format(brief.model_run.metrics.xgboost_calibration_error or 0) }}</span></div>
+    </div>
+    <p class="method-note">Champion: <strong>{{ brief.model_run.algorithm|replace('_', ' ') }}</strong>. XGBoost is promoted only with ≥1% MAE improvement and no material calibration regression.</p>
+  </article>
+  <article class="panel">
+    <p class="eyebrow">Sparse lineups</p><h2>PyMC uncertainty</h2>
+    <div class="big-number">{{ '%.0f'|format((brief.model_run.metrics.pymc_interval_coverage_80 or 0) * 100) }}<span>%</span></div>
+    <p>Observed 80% posterior-predictive interval coverage on aggregated lineup stints.</p>
+  </article>
+  <article class="panel">
+    <p class="eyebrow">Leakage control</p><h2>As-of contract</h2>
+    <div class="big-number date">{{ brief.data_cutoff_at.strftime('%b %-d') }}</div>
+    <p>All games, features, and rolling windows stop at {{ brief.data_cutoff_at.strftime('%H:%M UTC') }}.</p>
+  </article>
+</section>
+<section class="lineage panel wide">
+  <p class="eyebrow">Source to decision</p><h2>Reproducible lineage</h2>
+  <ol>
+    <li><strong>ESPN game summaries</strong><span>Immutable JSON, URL, retrieval timestamp, SHA-256</span></li>
+    <li><strong>Validated events</strong><span>Unique ordering, final score, starters, substitutions</span></li>
+    <li><strong>SQL marts</strong><span>Possessions, lineup stints, rolling pregame features</span></li>
+    <li><strong>Model registry</strong><span>{{ brief.model_run.data_hash[:12] }}… data · {{ brief.model_run.feature_schema_hash[:12] }}… schema</span></li>
+    <li><strong>Frozen brief</strong><span>{{ brief.frozen_at.strftime('%b %-d, %Y %H:%M UTC') }}</span></li>
+  </ol>
+</section>
+<section class="caveats panel wide">
+  <p class="eyebrow">Required caveats</p><h2>What this system does not know</h2>
+  <ul>{% for caveat in brief.caveats %}<li>{{ caveat }}</li>{% endfor %}</ul>
+</section>
+{% endblock %}
