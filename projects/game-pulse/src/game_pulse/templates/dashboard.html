@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Possession-level win probability</p>
+    <h1>Every game has a <span>pulse.</span></h1>
+    <p class="hero-copy">Follow how Golden State's estimated chance of winning moved from one possession to the next. All 2026 games are held out from model selection.</p>
+  </div>
+  <form class="game-picker" method="get" action="/">
+    <label for="game_id">Explore a completed game</label>
+    <div>
+      <select id="game_id" name="game_id">
+        {% for option in game_options %}
+        <option value="{{ option.game.game_id }}" {{ 'selected' if option.game.game_id == game.game_id else '' }}>{{ option.date.strftime('%b %-d') }} · {{ option.game.matchup }} · {{ option.game.result }} {{ option.game.valkyries_score }}–{{ option.game.opponent_score }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">View pulse</button>
+    </div>
+  </form>
+</section>
+
+<section class="game-heading">
+  <div>
+    <p class="eyebrow">{{ game_date_local.strftime('%B %-d, %Y') }} · {{ game.location }}</p>
+    <h2>{{ game.matchup }}</h2>
+  </div>
+  <div class="final-score"><span>{{ game.result }}</span><strong>{{ game.valkyries_score }}–{{ game.opponent_score }}</strong></div>
+</section>
+
+<section class="kpi-grid" aria-label="Game summary">
+  <article class="kpi"><span>Opening probability</span><strong>{{ '%.0f%%'|format(game.opening_win_probability * 100) }}</strong><small>At the first possession start</small></article>
+  <article class="kpi"><span>In-game range</span><strong>{{ '%.0f'|format(game.minimum_win_probability * 100) }}–{{ '%.0f%%'|format(game.maximum_win_probability * 100) }}</strong><small>Before the synthetic final state</small></article>
+  <article class="kpi"><span>Largest swing</span><strong>{{ '%.1f'|format(game.largest_swing * 100) }}<em>pp</em></strong><small>Absolute one-possession movement</small></article>
+  <article class="kpi"><span>Test Brier</span><strong>{{ '%.3f'|format(champion_result.test.game_balanced_brier) }}</strong><small>{{ artifact.model_card.champion|replace('_', ' ') }} · game balanced</small></article>
+</section>
+
+<section class="panel pulse-panel">
+  <div class="section-heading">
+    <div><p class="eyebrow">Win probability timeline</p><h2>Golden State win probability</h2></div>
+    <p>Markers identify the five possessions with the largest absolute change. The final 0% or 100% point is observed, not modeled.</p>
+  </div>
+  <div class="chart-scroll">
+    <svg class="pulse-chart" viewBox="0 0 {{ timeline_chart.width }} {{ timeline_chart.height }}" role="img" aria-labelledby="pulse-title pulse-desc">
+      <title id="pulse-title">Golden State win probability during {{ game.matchup }}</title>
+      <desc id="pulse-desc">The estimate opened at {{ '%.0f%%'|format(game.opening_win_probability * 100) }}, ranged from {{ '%.0f%%'|format(game.minimum_win_probability * 100) }} to {{ '%.0f%%'|format(game.maximum_win_probability * 100) }}, and ended with a {{ game.result }}.</desc>
+      {% for tick in timeline_chart.y_ticks %}
+      <line x1="{{ timeline_chart.left }}" x2="{{ timeline_chart.left + timeline_chart.plot_width }}" y1="{{ tick.y }}" y2="{{ tick.y }}" class="grid-line {{ 'reference' if tick.value == 0.5 else '' }}" />
+      <text x="{{ timeline_chart.left - 10 }}" y="{{ tick.y + 4 }}" class="axis-label" text-anchor="end">{{ tick.label }}</text>
+      {% endfor %}
+      {% for boundary in timeline_chart.boundaries %}
+      <line x1="{{ boundary.x }}" x2="{{ boundary.x }}" y1="{{ timeline_chart.top }}" y2="{{ timeline_chart.top + timeline_chart.plot_height }}" class="period-line" />
+      <text x="{{ boundary.x + 8 }}" y="{{ timeline_chart.top + 16 }}" class="period-label">{{ boundary.label }}</text>
+      {% endfor %}
+      <path d="{{ timeline_chart.path }}" class="probability-line" />
+      {% for marker in timeline_chart.markers %}
+      <g class="turn-marker">
+        <circle cx="{{ marker.x }}" cy="{{ marker.y }}" r="12"><title>{{ marker.label }}</title></circle>
+        <text x="{{ marker.x }}" y="{{ marker.y + 4 }}" text-anchor="middle">{{ marker.rank }}</text>
+      </g>
+      {% endfor %}
+      <circle cx="{{ timeline_chart.opening_x }}" cy="{{ timeline_chart.opening_y }}" r="5" class="endpoint" />
+      <circle cx="{{ timeline_chart.final_x }}" cy="{{ timeline_chart.final_y }}" r="6" class="endpoint final" />
+      <text x="{{ timeline_chart.left }}" y="{{ timeline_chart.height - 12 }}" class="axis-label">Tipoff</text>
+      <text x="{{ timeline_chart.left + timeline_chart.plot_width }}" y="{{ timeline_chart.height - 12 }}" class="axis-label" text-anchor="end">Final horn</text>
+    </svg>
+  </div>
+</section>
+
+<section class="turning-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">Highest leverage</p><h2>Five largest possession swings</h2></div>
+    <p>Win-probability movement describes the game state around a possession; it does not assign causal credit to a player.</p>
+  </div>
+  <div class="turn-grid">
+    {% for turn in game.turning_points %}
+    <article class="turn-card">
+      <div class="turn-rank">0{{ turn.rank }}</div>
+      <div>
+        <p class="turn-time">{{ turn.period_label }} · {{ turn.clock }}</p>
+        <h3>{{ turn.description }}</h3>
+        <div class="swing-values"><span>{{ '%.0f%%'|format(turn.win_probability_before * 100) }}</span><i aria-hidden="true">→</i><span>{{ '%.0f%%'|format(turn.win_probability_after * 100) }}</span><strong>{{ '%+.1f pp'|format(turn.win_probability_added * 100) }}</strong></div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="model-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">Model validation</p><h2>Selected before the 2026 test season</h2></div>
+    <p>{{ artifact.model_card.promotion_rule }}</p>
+  </div>
+  <div class="model-grid">
+    <article class="panel model-table-panel">
+      <h3>Out-of-time model comparison</h3>
+      <p class="panel-note">All 219 eligible 2026 league games · lower is better</p>
+      <div class="model-table" role="table" aria-label="Model comparison">
+        <div class="model-row header" role="row"><span>Model</span><span>Brier</span><span>Calibration</span><span>Late game</span></div>
+        {% for model in artifact.model_card.models %}
+        <div class="model-row {{ 'champion' if model.promoted else '' }}" role="row">
+          <span><strong>{{ model.name|replace('_', ' ') }}</strong><small>{{ 'Champion' if model.promoted else 'Benchmark' }}</small></span>
+          <span>{{ '%.3f'|format(model.test.game_balanced_brier) }}</span>
+          <span>{{ '%.3f'|format(model.test.calibration_error) }}</span>
+          <span>{{ '%.3f'|format(model.test.late_game_brier) }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </article>
+    <article class="panel calibration-panel">
+      <h3>Calibration by probability decile</h3>
+      <p class="panel-note">Observed home win rate versus predicted probability</p>
+      <svg viewBox="0 0 {{ calibration_chart.width }} {{ calibration_chart.height }}" role="img" aria-labelledby="calibration-title calibration-desc">
+        <title id="calibration-title">Champion model calibration</title>
+        <desc id="calibration-desc">Points near the diagonal indicate predicted probabilities that match observed win rates.</desc>
+        <line x1="{{ calibration_chart.left }}" y1="{{ calibration_chart.top + calibration_chart.plot_height }}" x2="{{ calibration_chart.left + calibration_chart.plot_width }}" y2="{{ calibration_chart.top }}" class="ideal-line" />
+        <path d="{{ calibration_chart.path }}" class="calibration-line" />
+        {% for point in calibration_chart.points %}<circle cx="{{ point.x }}" cy="{{ point.y }}" r="5" class="calibration-point"><title>{{ '%.0f%%'|format(point.prediction * 100) }} predicted · {{ '%.0f%%'|format(point.observed * 100) }} observed · {{ point.observations }} possessions</title></circle>{% endfor %}
+        <text x="{{ calibration_chart.left + calibration_chart.plot_width / 2 }}" y="{{ calibration_chart.height - 8 }}" class="axis-label" text-anchor="middle">Predicted probability</text>
+        <text x="15" y="{{ calibration_chart.top + calibration_chart.plot_height / 2 }}" class="axis-label" text-anchor="middle" transform="rotate(-90 15 {{ calibration_chart.top + calibration_chart.plot_height / 2 }})">Observed win rate</text>
+      </svg>
+    </article>
+  </div>
+  {% if selection_reversal %}
+  <aside class="monitoring-callout">
+    <p class="eyebrow">Monitoring signal</p>
+    <h3>The selection winner did not retain its edge in 2026.</h3>
+    <p>The frozen {{ champion_result.name|replace('_', ' ') }} winner scored {{ '%.3f'|format(champion_result.test.game_balanced_brier) }} Brier on the untouched test season, while {{ best_test_result.name|replace('_', ' ') }} scored {{ '%.3f'|format(best_test_result.test.game_balanced_brier) }}. The test set does not rewrite the predeclared selection decision; it triggers a documented review and favors the simpler benchmark for the next model cycle.</p>
+  </aside>
+  {% endif %}
+</section>
+
+<section class="method-grid">
+  <article class="panel"><p class="eyebrow">Chronology</p><h3>{{ artifact.model_card.split.train_games }} / {{ artifact.model_card.split.validation_games }} / {{ artifact.model_card.split.calibration_games }} / {{ artifact.model_card.split.selection_games }}</h3><p>Pre-2026 games form training, validation, calibration, and selection windows. All {{ artifact.model_card.split.test_games }} eligible 2026 games remain untouched until final evaluation.</p></article>
+  <article class="panel"><p class="eyebrow">Sequence model</p><h3>10 prior possessions</h3><p>The Keras GRU sees only lagged scoring, duration, possession identity, half-court state, and terminal-action category alongside the current score-and-clock context.</p></article>
+  <article class="panel"><p class="eyebrow">Interpretation boundary</p><h3>Descriptive, not causal</h3><p>Public play-by-play omits timeouts, assignments, health, tactical intent, and tracking context. A large swing is a game-state change, not proof of individual impact.</p></article>
+</section>
+{% endblock %}
