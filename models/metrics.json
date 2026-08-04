@@ -1,0 +1,165 @@
+{
+  "ablations": {
+    "without_lineup": {
+      "mae": 1.085496698689826,
+      "mae_delta_vs_full": 4.1671516193275693e-07
+    },
+    "without_opponent_style": {
+      "mae": 1.0850785900153492,
+      "mae_delta_vs_full": -0.0004176919593148476
+    },
+    "without_rest": {
+      "mae": 1.0855048734854744,
+      "mae_delta_vs_full": 8.591510810340708e-06
+    }
+  },
+  "baseline": {
+    "calibration_error": 0.04774703773463739,
+    "game_rating_mae": 10.015793043324502,
+    "mae": 1.085496281974664,
+    "rmse": 1.149709698199624
+  },
+  "calibration_deciles": {
+    "baseline": [
+      {
+        "decile": 1,
+        "mean_actual": 1.0025354969574036,
+        "mean_prediction": 0.9678807601611068,
+        "possessions": 1972
+      },
+      {
+        "decile": 2,
+        "mean_actual": 0.9806812404677173,
+        "mean_prediction": 0.9801727351460574,
+        "possessions": 1967
+      },
+      {
+        "decile": 3,
+        "mean_actual": 1.0570418980312972,
+        "mean_prediction": 0.9874132694684418,
+        "possessions": 1981
+      },
+      {
+        "decile": 4,
+        "mean_actual": 1.0564598168870805,
+        "mean_prediction": 0.992213054294902,
+        "possessions": 1966
+      },
+      {
+        "decile": 5,
+        "mean_actual": 1.0312345066931086,
+        "mean_prediction": 0.9959315412945464,
+        "possessions": 2017
+      },
+      {
+        "decile": 6,
+        "mean_actual": 1.0125391849529781,
+        "mean_prediction": 0.9996686778428241,
+        "possessions": 1914
+      },
+      {
+        "decile": 7,
+        "mean_actual": 1.0389282103134478,
+        "mean_prediction": 1.0031809535545329,
+        "possessions": 1978
+      },
+      {
+        "decile": 8,
+        "mean_actual": 1.0518292682926829,
+        "mean_prediction": 1.007075725312558,
+        "possessions": 1968
+      },
+      {
+        "decile": 9,
+        "mean_actual": 1.1064154786150713,
+        "mean_prediction": 1.0122492555003675,
+        "possessions": 1964
+      },
+      {
+        "decile": 10,
+        "mean_actual": 1.1068158697863684,
+        "mean_prediction": 1.0218037363835506,
+        "possessions": 1966
+      }
+    ],
+    "xgboost": [
+      {
+        "decile": 1,
+        "mean_actual": 0.9995201535508638,
+        "mean_prediction": 0.9484331837485253,
+        "possessions": 2084
+      },
+      {
+        "decile": 2,
+        "mean_actual": 1.021551724137931,
+        "mean_prediction": 0.9725607084752671,
+        "possessions": 1856
+      },
+      {
+        "decile": 3,
+        "mean_actual": 1.0527638190954773,
+        "mean_prediction": 0.9861936383211433,
+        "possessions": 1990
+      },
+      {
+        "decile": 4,
+        "mean_actual": 1.0424335378323109,
+        "mean_prediction": 0.993692139784495,
+        "possessions": 1956
+      },
+      {
+        "decile": 5,
+        "mean_actual": 1.063936063936064,
+        "mean_prediction": 1.0007441349617847,
+        "possessions": 2002
+      },
+      {
+        "decile": 6,
+        "mean_actual": 1.0205338809034907,
+        "mean_prediction": 1.0074725325469853,
+        "possessions": 1948
+      },
+      {
+        "decile": 7,
+        "mean_actual": 1.0314242270653826,
+        "mean_prediction": 1.0131940473715062,
+        "possessions": 1973
+      },
+      {
+        "decile": 8,
+        "mean_actual": 1.0512295081967213,
+        "mean_prediction": 1.0183917101411546,
+        "possessions": 1952
+      },
+      {
+        "decile": 9,
+        "mean_actual": 1.0727816550348954,
+        "mean_prediction": 1.0267589855289174,
+        "possessions": 2006
+      },
+      {
+        "decile": 10,
+        "mean_actual": 1.0898234683281411,
+        "mean_prediction": 1.0670962793557195,
+        "possessions": 1926
+      }
+    ]
+  },
+  "pymc": {
+    "interval_coverage_80": 0.6714208584540629,
+    "players": 290.0,
+    "status": "complete"
+  },
+  "split": "rolling game-date 80/20 holdout",
+  "test_games": 148,
+  "test_possessions": 19693,
+  "train_games": 591,
+  "train_possessions": 76772,
+  "xgboost": {
+    "calibration_error": 0.04129999086963746,
+    "game_rating_mae": 9.982459891872834,
+    "mae": 1.0861317414917324,
+    "rmse": 1.149740262534861
+  },
+  "xgboost_wins_gate": false
+}

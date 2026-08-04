@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Pregame Brief · Valkyries Matchup Intelligence{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">Decision brief · data through {{ brief.data_cutoff_at.strftime('%b %-d, %Y %H:%M UTC') }}</p>
+  <h1>Find more half-court offense.<br><span>Protect the defensive identity.</span></h1>
+  <p class="hero-copy">{{ brief.direct_answer }}</p>
+  <div class="hero-meta">
+    <span>Toronto Tempo at Golden State</span>
+    <span>{{ scheduled_local.strftime('%b %-d · %-I:%M %p PT') }}</span>
+    <span>Defense tolerance +{{ '%.1f'|format(brief.defense_tolerance_pp100) }} / 100</span>
+  </div>
+</section>
+
+<section class="kpi-grid" aria-label="Decision summary">
+  <article class="kpi"><span>Candidate groups</span><strong>{{ brief.scenarios|length }}</strong><small>Observed, five-player lineups</small></article>
+  <article class="kpi"><span>Clear guardrail</span><strong>{{ brief.scenarios|selectattr('meets_guardrail')|list|length }}</strong><small>≥75% probability</small></article>
+  <article class="kpi"><span>Champion</span><strong class="text-value">{{ brief.model_run.algorithm|replace('_', ' ') }}</strong><small>Rolling-origin model gate</small></article>
+  <article class="kpi"><span>Artifact status</span><strong class="text-value">Frozen</strong><small>{{ brief.frozen_at.strftime('%b %-d · %H:%M UTC') }}</small></article>
+</section>
+
+<section class="section-heading">
+  <div><p class="eyebrow">Recommended tests</p><h2>Three bounded lineup experiments</h2></div>
+  <p>Recommendations are ranked by offensive lift after applying the defensive uncertainty screen.</p>
+</section>
+<section class="recommendation-grid">
+{% for recommendation in brief.recommendations %}
+  {% set scenario = brief.scenarios|selectattr('prediction_id', 'equalto', recommendation.prediction_id)|first %}
+  <article class="recommendation">
+    <div class="rank">0{{ recommendation.rank }}</div>
+    <p class="confidence">{{ recommendation.confidence }} confidence</p>
+    <h3>{{ scenario.lineup_names|join(' · ') }}</h3>
+    <div class="rating-pair">
+      <div><span>Projected offense</span><strong>{{ '%.1f'|format(scenario.expected_offense_pp100) }}</strong><small>{{ '%+.1f'|format(scenario.offensive_lift_pp100) }} vs. baseline</small></div>
+      <div><span>Projected defense</span><strong>{{ '%.1f'|format(scenario.expected_defense_pp100) }}</strong><small>{{ '%.0f'|format(scenario.guardrail_probability * 100) }}% guardrail probability</small></div>
+    </div>
+    <p>{{ recommendation.evidence }}</p>
+    <details><summary>Decision caveat</summary><p>{{ recommendation.caveat }}</p></details>
+  </article>
+{% endfor %}
+</section>
+
+<section class="callout">
+  <div><p class="eyebrow">Interpretation boundary</p><h2>Scenario comparison, not a coaching prescription</h2></div>
+  <p>The model estimates how observed player combinations performed after shrinkage and matchup adjustment. Public play-by-play cannot isolate coverage, assignment, health, or causal rotation effects.</p>
+</section>
+{% endblock %}

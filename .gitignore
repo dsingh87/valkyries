@@ -1,4 +1,22 @@
 .venv/
+.venv*/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.vercel/
+.next/
+.wrangler/
+dist/
+node_modules/
+*.tsbuildinfo
+
+data/raw/
+data/processed/
+*.sqlite3
+*.db
+models/*.pkl
+models/*.ubj
 
 __pycache__/
 *.py[cod]
