@@ -4,8 +4,5 @@
     "api/index.py": {
       "excludeFiles": "{tests/**,data/raw/**,data/processed/**,models/**,notebooks/**}"
     }
-  },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index" }
-  ]
+  }
 }
