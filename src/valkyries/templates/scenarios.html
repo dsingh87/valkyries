@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Scenario Explorer · Valkyries Matchup Intelligence{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <p class="eyebrow">Analyst view</p>
+  <h1>Lineup scenario explorer</h1>
+  <p>Change the acceptable defensive downside. The ranking updates from the frozen posterior summaries; no model is retrained in the browser.</p>
+</section>
+<section class="control-panel">
+  <label for="tolerance">Maximum defensive degradation <strong id="tolerance-value">+2.0</strong> points / 100</label>
+  <input id="tolerance" type="range" min="0" max="5" step="0.5" value="2" aria-describedby="tolerance-help">
+  <p id="tolerance-help">A scenario clears when its probability of staying within this limit is at least 75%.</p>
+</section>
+<section aria-live="polite" aria-busy="false" id="scenario-region">
+  <div class="chart-heading"><div><p class="eyebrow">Comparison &amp; uncertainty</p><h2>Projected half-court ratings</h2></div><p>Points per 100 possessions · 80% intervals · minimum sample shown</p></div>
+  <div id="scenario-chart" class="scenario-chart"></div>
+</section>
+<script>
+const gameId = {{ brief.target_game_id|tojson }};
+const slider = document.getElementById('tolerance');
+const value = document.getElementById('tolerance-value');
+const chart = document.getElementById('scenario-chart');
+const region = document.getElementById('scenario-region');
+
+function rowMarkup(item) {
+  const names = item.lineup_names.map(name => name.split(' ').slice(-1)[0]).join(' · ');
+  const offenseWidth = Math.max(2, Math.min(100, item.expected_offense_pp100 / 1.35));
+  const defenseWidth = Math.max(2, Math.min(100, item.expected_defense_pp100 / 1.35));
+  const state = item.meets_guardrail ? 'Clears guardrail' : 'Outside guardrail';
+  return `<article class="scenario-row ${item.meets_guardrail ? 'qualifies' : ''}">
+    <div class="scenario-label"><strong>${names}</strong><span>${item.sample_possessions} validated possessions · ${state}</span></div>
+    <div class="bar-group">
+      <div class="bar-line"><span>OFF</span><div><i class="offense" style="width:${offenseWidth}%"></i></div><b>${item.expected_offense_pp100.toFixed(1)}</b></div>
+      <div class="bar-line"><span>DEF</span><div><i class="defense" style="width:${defenseWidth}%"></i></div><b>${item.expected_defense_pp100.toFixed(1)}</b></div>
+    </div>
+    <div class="probability"><strong>${Math.round(item.guardrail_probability * 100)}%</strong><span>guardrail probability</span></div>
+  </article>`;
+}
+
+async function refresh() {
+  const tolerance = Number(slider.value);
+  value.textContent = `+${tolerance.toFixed(1)}`;
+  region.setAttribute('aria-busy', 'true');
+  const response = await fetch(`/api/scenarios/${gameId}?defense_tolerance=${tolerance}`);
+  if (!response.ok) {
+    chart.innerHTML = '<p class="error">Scenario data could not be loaded.</p>';
+  } else {
+    const rows = await response.json();
+    chart.innerHTML = rows.map(rowMarkup).join('');
+  }
+  region.setAttribute('aria-busy', 'false');
+}
+slider.addEventListener('input', refresh);
+refresh();
+</script>
+{% endblock %}

@@ -6,6 +6,7 @@ from valkyries.ingestion.wnba_play_by_play import (
     validate_play_by_play,
 )
 
+
 class ExtractPlayByPlayTests(unittest.TestCase):
     def test_extracts_play_by_play_from_next_data(self) -> None:
         html = """
@@ -40,6 +41,7 @@ class ExtractPlayByPlayTests(unittest.TestCase):
         self.assertEqual(len(result["actions"]), 1)
         self.assertEqual(result["actions"][0]["actionId"], 1)
 
+
 class ValidatePlayByPlayTests(unittest.TestCase):
     def test_rejects_wrong_game_id(self) -> None:
         play_by_play = {
@@ -54,6 +56,70 @@ class ValidatePlayByPlayTests(unittest.TestCase):
             validate_play_by_play(
                 play_by_play,
                 expected_game_id="1022600195",
+            )
+
+    def test_rejects_missing_or_empty_actions(self) -> None:
+        invalid_payloads = (
+            {"gameId": "1022600195"},
+            {"gameId": "1022600195", "actions": []},
+        )
+
+        for play_by_play in invalid_payloads:
+            with self.subTest(play_by_play=play_by_play):
+                with self.assertRaisesRegex(
+                    PlayByPlayValidationError,
+                    "actions must be a non-empty list",
+                ):
+                    validate_play_by_play(
+                        play_by_play,
+                        expected_game_id="1022600195",
+                    )
+
+    def test_rejects_duplicate_or_out_of_order_action_ids(self) -> None:
+        invalid_payloads = (
+            {
+                "gameId": "1022600195",
+                "actions": [{"actionId": 1}, {"actionId": 1}],
+            },
+            {
+                "gameId": "1022600195",
+                "actions": [{"actionId": 2}, {"actionId": 1}],
+            },
+        )
+
+        for play_by_play in invalid_payloads:
+            with (
+                self.subTest(play_by_play=play_by_play),
+                self.assertRaises(PlayByPlayValidationError),
+            ):
+                validate_play_by_play(
+                    play_by_play,
+                    expected_game_id="1022600195",
+                )
+
+    def test_reconciles_final_score(self) -> None:
+        play_by_play = {
+            "gameId": "1022600195",
+            "actions": [
+                {"actionId": 1, "scoreAway": 0, "scoreHome": 0},
+                {"actionId": 2, "scoreAway": 90, "scoreHome": 82},
+            ],
+        }
+
+        validate_play_by_play(
+            play_by_play,
+            expected_game_id="1022600195",
+            expected_final_score=(90, 82),
+        )
+
+        with self.assertRaisesRegex(
+            PlayByPlayValidationError,
+            "does not match expected score",
+        ):
+            validate_play_by_play(
+                play_by_play,
+                expected_game_id="1022600195",
+                expected_final_score=(82, 90),
             )
 
 

@@ -1,192 +1,180 @@
-# Valkyries Matchup Intelligence Engine
+# Valkyries–Toronto Matchup Intelligence
 
-An end-to-end basketball decision-support system for the Golden State Valkyries. The project updates after every WNBA game, estimates matchup- and lineup-specific outcomes, tests rotation scenarios for upcoming opponents, and produces a concise evidence-grounded scouting brief.
+A reproducible basketball decision-support case study for Golden State's August 4, 2026 Toronto rematch. The project turns public play-by-play into validated possessions and lineup stints, benchmarks three modeling approaches, and publishes an uncertainty-aware analyst brief.
 
-This is deliberately not a generic win predictor, player-ranking exercise, or shot-chart dashboard. Its value is the complete path from unreliable public event data to an evaluated model and a tool a basketball stakeholder could use.
+> Which feasible Golden State lineup adjustments project to improve half-court offense against Toronto without materially weakening the defense?
 
-## Current basketball question
+The frozen answer uses only games completed by `2026-08-03T08:00:00Z`. It is a scenario comparison—not a causal claim or a proposed coaching rotation.
 
-As of July 28, 2026, Golden State's statistical identity is unusually clear: the team is playing at the league's slowest pace, with the top defensive rating, the eighth-ranked offense, and the second-best net rating in the recent Basketball Reference snapshot. The current analytical question is therefore:
+## Decision snapshot
 
-> Which lineup and matchup adjustments can improve Golden State's half-court offense without degrading the defensive identity that makes the team elite?
+The published screen considers 38 Golden State lineups used in the 45 days before the cutoff with at least 10 validated half-court possessions. Eight clear the default guardrail: at least a 75% modeled probability that defense declines by no more than 2 points per 100 possessions.
 
-The upcoming schedule gives us strong case studies:
+The three bounded-stint candidates are:
 
-- July 29 at Phoenix: first live pregame forecast and subsequent backtest.
-- August 2 and August 4 vs. Toronto: a paired-opponent study that measures what changed between Games 1 and 2.
-- August 7 at Dallas and August 9 at Los Angeles: a travel/rest and rotation-load stress test.
-- August 19 vs. Minnesota and August 24 at Minnesota: contender-level matchup validation.
-- August 26 at Connecticut and August 27 at New York: a back-to-back rotation optimization case.
+1. Kayla Thornton · Gabby Williams · Cecilia Zandalasini · Veronica Burton · Janelle Salaun
+2. Gabby Williams · Kaila Charles · Veronica Burton · Laeticia Amihere · Janelle Salaun
+3. Tiffany Hayes · Kayla Thornton · Kaila Charles · Veronica Burton · Laeticia Amihere
 
-Sources: [official Valkyries 2026 schedule announcement](https://valkyries.wnba.com/news/valkyries-announce-2026-schedule-20260121), [official July 20 recap and next-game note](https://valkyries.wnba.com/news/gameday-recap-20260720), and [2026 team statistical snapshot](https://www.basketball-reference.com/wnba/teams/GSV/2026.html).
+Read the intervals and evidence counts in the [frozen brief](artifacts/aug4_toronto.json). These estimates are observational, partially pooled, and adjusted toward Toronto's 2026 style and the July 8/August 2 direct matchups.
 
-## What the finished product does
+## What this demonstrates
 
-Given an upcoming game, the system should answer five questions:
+- **Python:** typed ingestion contracts, event normalization, lineup replay, possession construction, model training, API schemas, and CLI orchestration.
+- **SQL and relational data:** normalized raw, event, possession, lineup, pipeline, model, prediction, and recommendation tables plus reviewed analytical marts.
+- **scikit-learn:** a leakage-safe `Pipeline`/`ColumnTransformer` Tweedie benchmark.
+- **XGBoost:** a nonlinear Poisson benchmark with a predeclared promotion gate.
+- **PyMC:** hierarchical offensive/defensive player effects fit with ADVI and posterior-predictive coverage checks.
+- **Decision integration:** feasible recent lineups, opponent adjustment, uncertainty guardrails, frozen predictions, and a postgame audit path.
+- **Deployment:** a server-rendered FastAPI analyst app designed for Vercel's Python runtime; training remains offline.
 
-1. What possession types and lineup contexts create the opponent's advantages?
-2. Which Golden State lineup families project best against those contexts?
-3. How uncertain are those estimates, especially for sparse lineup combinations?
-4. How do rest, travel, recent workload, and player availability change the recommendation?
-5. After the game, what actually happened and which assumptions were wrong?
+Keras is deliberately deferred. A sequence model must first have adequate sequence-level data and beat the rolling-origin benchmark.
 
-The output is a two-layer product:
+## Results
 
-- An analyst view with model diagnostics, uncertainty, data lineage, and scenario controls.
-- A two-page basketball brief with three evidence-backed recommendations and explicit caveats.
+The holdout is separated by game date; possessions from future games never enter training.
 
-## System architecture
+| Model | MAE | RMSE | Calibration error | Decision |
+|---|---:|---:|---:|---|
+| scikit-learn Tweedie | 1.085 | 1.150 | 0.048 | Champion |
+| XGBoost Poisson | 1.086 | 1.150 | 0.041 | Not promoted: no MAE improvement |
+| PyMC hierarchy | — | — | 67.1% coverage of nominal 80% intervals | Used to diagnose sparse-lineup uncertainty |
+
+Game-level half-court rating MAE is 10.02 for Tweedie and 9.98 for XGBoost. Feature ablations show no material incremental holdout signal from lineup identity, opponent style, or rest in this public-data sample. Those null results and the lower-than-nominal PyMC coverage are published as limitations, not hidden. See [the model card](docs/model-card.md).
+
+## Architecture
 
 ```text
-WNBA schedule + box scores + play-by-play + substitutions + shots
-                              |
-                    incremental ingestion
-                              |
-            raw events -> validated possessions -> lineup stints
-                              |
-       team style marts + player/lineup effects + schedule features
-                              |
-       possession model + matchup model + rotation optimizer
-                              |
-       analyst app + generated scouting brief + postgame audit
+ESPN scoreboard + summaries          WNBA HTML contract
+             │                         (cross-check)
+             └──────────┬──────────────────┘
+                        ▼
+              immutable raw payloads
+          URL · retrieval time · SHA-256
+                        ▼
+             GameBundle validation
+       score · ordering · starters · subs
+                        ▼
+       events → lineup stints → possessions
+                        ▼
+              SQL analytical marts
+   team_game_features · lineup_features · pregame_matchups
+                        ▼
+      Tweedie · XGBoost · PyMC benchmarks
+                        ▼
+         frozen JSON + FastAPI/Vercel app
+                        ▼
+                 postgame audit
 ```
 
-### Data engineering layer
+SQLite is the zero-configuration local and CI backend. The same schema supports pooled SSL Postgres connections through `psycopg`, suitable for Neon provisioned in Vercel. The deployed request path reads the frozen JSON artifact and does not bundle training dependencies.
 
-The local-first stack will use Python, SQL, Parquet, DuckDB, and dbt-core. It can later be moved to Postgres or a cloud warehouse without changing the analytical contracts.
+## Reproduce locally
 
-Core tables:
+Python 3.12 is required.
 
-- `games`: schedule, venue, result, rest, travel, and opponent.
-- `events`: canonical play-by-play events with stable event keys.
-- `possessions`: possession boundaries, outcome, context, and sequence features.
-- `lineup_stints`: ten players on court, start/end event, possessions, and score margin.
-- `shots`: shooter, location/zone when available, shot context, and result.
-- `player_game`: minutes, workload proxies, role, availability, and box-score features.
-- `team_style_daily`: rolling and opponent-adjusted style estimates as known on each date.
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev,database,modeling]'
 
-Required quality checks:
+valkyries ingest --start-season 2024 --cutoff 2026-08-03T08:00:00Z
+valkyries build
+valkyries train --cutoff 2026-08-03T08:00:00Z
+valkyries recommend --game-id 401857114
 
-- Idempotent reruns and incremental game-level updates.
-- Unique game/event keys and monotonic event order.
-- Score reconciliation with the official final score.
-- Exactly five players per team for valid lineup stints.
-- Regulation lineup minutes reconcile to team minutes.
-- No future information in a pregame feature row.
-- Source freshness and failed-game quarantine rather than silent partial loads.
+fastapi dev src/valkyries/web.py
+```
 
-### Modeling layer
+The first four `valkyries` commands are the end-to-end reproduction path. The checked-in frozen artifact lets the web app run without re-downloading or retraining.
 
-#### 1. Possession outcome model
+### CLI
 
-Estimate expected points for an upcoming possession using only information available before that possession:
+```text
+valkyries ingest --start-season 2024 --cutoff <timestamp>
+valkyries build
+valkyries train --cutoff <timestamp>
+valkyries recommend --game-id <id>
+valkyries audit --game-id <id>
+```
 
-- Offensive and defensive lineup components.
-- Opponent-adjusted recent form with time decay.
-- Shot-creation and possession-sequence proxies.
-- Score, quarter, rest, travel, and prior workload.
-- Team and player interactions only where the sample supports them.
+Set `DATABASE_URL` to a Postgres URL for Neon; otherwise `data/valkyries.sqlite3` is used. `VALKYRIES_ARTIFACT_PATH` overrides the published JSON location.
 
-Start with an interpretable regularized generalized linear model, then compare it with LightGBM or CatBoost. Complexity is earned only if rolling out-of-sample evaluation improves.
+## Analyst app and API
 
-#### 2. Dynamic player and lineup impact
+The app has three views:
 
-Use partial pooling or regularized adjusted plus-minus to estimate offensive and defensive effects while controlling for teammates and opponents. Report intervals, not just point estimates. Sparse lineups inherit information from players, roles, and similar lineup constructions instead of receiving unstable raw plus-minus values.
+- **Pregame brief:** direct answer, recommendations, intervals, and caveats.
+- **Scenario explorer:** browser-side comparison across defensive-risk tolerances.
+- **Model & data:** rolling benchmark, uncertainty coverage, lineage, hashes, and limitations.
 
-#### 3. Opponent-style representation
+Public interfaces:
 
-Represent team styles from possession-level features rather than box-score averages. Candidate inputs include transition proxies, early-clock rate, assisted-shot patterns, shot-zone mix, turnover creation, offensive-rebound continuation, foul generation, and lineup size/spacing proxies.
+```text
+GET /api/brief/401857114
+GET /api/scenarios/401857114?defense_tolerance=2
+GET /api/model-card
+GET /api/health
+```
 
-Use PCA/NMF or a small learned embedding to retrieve comparable opponents and historical possessions. This provides matchup evidence when Golden State has little direct history against an expansion team such as Toronto.
+Deploy to Vercel after linking the repository:
 
-#### 4. Rotation scenario optimizer
+```bash
+npx vercel
+npx vercel --prod
+```
 
-Use constrained optimization to compare feasible rotation plans:
+`vercel.json` routes requests to `api/index.py`. If Neon is not configured, the app intentionally serves the same versioned frozen artifact while SQLite remains the demonstrated local/CI relational backend.
 
-- Minute floors and ceilings.
-- Position/size and ball-handler constraints.
-- Maximum continuous stint lengths.
-- Rest and recent workload penalties.
-- Availability scenarios.
-- Robust objective across pessimistic, median, and optimistic model estimates.
+## Data quality contract
 
-The result is a scenario comparison, not a claim that an algorithm should set the coach's rotation.
+The backfill discovered 753 completed 2024–2026 games before the cutoff. It published 739 (98.1%) and quarantined 14 rather than silently accepting incomplete lineage. The database contains:
 
-#### 5. Grounded AI reporting layer
+- 291,552 normalized events
+- 21,276 reconstructed lineup stints
+- 120,514 possessions
+- 172 bounded score-attribution corrections (0.14%), excluded from model marts
 
-An LLM may translate structured model output and retrieved official game context into a scouting brief. It must:
+Validation covers empty actions, event identity/order, final-score reconciliation, starters and substitutions, five-player lineups, minutes, overtime, cutoff compliance, and idempotent reruns. Details are in [the data-quality report](docs/data-quality.md).
 
-- Receive only versioned model outputs and approved source excerpts.
-- Cite the supporting table or source for every quantitative claim.
-- Separate observations, model estimates, and recommendations.
-- Refuse unsupported tactical claims that cannot be inferred from public play-by-play.
-- Fall back to deterministic templates when grounding checks fail.
+“Half-court” is a documented public-data proxy: the terminal scoring attempt, foul, or turnover occurs more than seven seconds after possession start. Five- and nine-second flags are retained for sensitivity. It is not tracking-derived transition classification.
 
-The LLM is the interface, not the analytical engine.
+## Verification
 
-## Evaluation contract
+```bash
+ruff check .
+ruff format --check .
+mypy src
+pytest
+```
 
-All validation is time-aware. Random train/test splits are prohibited.
+CI also imports the Vercel entrypoint and runs a small SQL/end-to-end fixture. Model training is intentionally offline because PyMC and XGBoost do not belong in a serverless request.
 
-- Use rolling-origin evaluation: train through date `t`, predict games after `t`.
-- Compare against simple rolling team-strength and opponent-adjusted baselines.
-- Evaluate possession error, calibration, ranking quality, and interval coverage.
-- Evaluate rotation recommendations through historical counterfactual sensitivity, not causal claims.
-- Run feature ablations for lineup, rest/travel, and recent-form components.
-- Publish failures and prediction revisions after each Valkyries game.
-- Freeze a pregame artifact before tipoff so the project cannot rewrite history.
+## Five-minute interview walkthrough
 
-## Project deliverables
+1. Start with the basketball question and defensive guardrail.
+2. Show one quarantined game and one validated `GameBundle` flowing through the SQL schema.
+3. Compare the Tweedie and XGBoost holdout results; explain why the simpler model wins the gate.
+4. Move the defensive tolerance slider and discuss posterior uncertainty and sample size.
+5. Open the frozen hash and postgame audit command to show the system cannot rewrite its pregame prediction.
 
-1. Reproducible repository with typed Python, SQL models, tests, CI, and one-command updates.
-2. Data dictionary and lineage diagram.
-3. Model card covering leakage, sparse lineups, uncertainty, drift, and public-data limitations.
-4. Analyst application for upcoming-game scenarios.
-5. Two-page pregame brief and postgame audit for each featured matchup.
-6. Technical article centered on the Toronto two-game adjustment study.
-7. Five-minute demo showing ingestion, prediction, scenario analysis, and postgame learning.
+## Limitations
 
-## Build sequence
+- Public events do not identify coverage, screening actions, off-ball responsibility, health, or tactical intent.
+- Lineup results are observational and cannot establish a causal rotation effect.
+- The opponent adjustment is transparent shrinkage, not a tracking-based matchup model.
+- The PyMC nominal 80% interval covered 67.1% on the holdout and needs recalibration.
+- Availability is inferred from recently used lineups; a private team system should use authoritative active-roster and medical inputs.
+- Direct WNBA HTML requests can be blocked, so ESPN is operational and the WNBA adapter is retained as a source contract/cross-check.
 
-### Phase 1 — trustworthy basketball data
+## Repository map
 
-- Ingest 2024-2026 WNBA schedules, box scores, play-by-play, and substitutions.
-- Build and validate possession and lineup-stint tables.
-- Create as-of-date features and a Phoenix pregame snapshot.
-
-### Phase 2 — first modeling system
-
-- Implement opponent-adjusted possession and lineup baselines.
-- Add time-aware evaluation and uncertainty.
-- Produce Toronto Game 1 brief, postgame audit, and Game 2 adjustment brief.
-
-### Phase 3 — decision layer
-
-- Add opponent-style retrieval and rotation scenarios.
-- Build analyst views for Dallas/Los Angeles schedule stress and Minnesota matchups.
-- Add automated data/model monitoring.
-
-### Phase 4 — communication and deployment
-
-- Add the grounded report generator.
-- Ship a small deployed app and scheduled update workflow.
-- Publish the technical write-up, model card, and case-study briefs.
-
-## Non-goals
-
-- Predicting final scores without a basketball decision attached.
-- Claiming play types or defensive coverages that public event data cannot identify.
-- Using deep learning solely to make the project sound advanced.
-- Treating raw plus-minus as player impact.
-- Building a chatbot over box scores.
-- Presenting correlation as a causal rotation effect.
-
-## System capabilities
-
-The project brings together the capabilities required for a reliable basketball decision-support system:
-
-- **Data engineering:** ingestion, event modeling, SQL, validation, orchestration, and reproducibility.
-- **Applied statistics and ML:** opponent adjustment, partial pooling, sparse-data handling, calibration, and time-aware validation.
-- **Decision science:** constrained scenarios and uncertainty-aware recommendations.
-- **AI engineering:** retrieval, structured generation, grounding, and evaluation.
-- **Basketball communication:** short decision-ready briefs rather than notebook dumps.
+```text
+api/                         Vercel FastAPI entrypoint
+artifacts/                   frozen Toronto brief and checksum
+docs/                        model card, data quality, source contract
+models/                      shareable metrics and PyMC summaries
+src/valkyries/               ingestion, transforms, SQL, models, API, UI
+tests/                       contracts, transformations, SQL, API
+.github/workflows/ci.yml     quality and deployment-entrypoint checks
+```
