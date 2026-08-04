@@ -65,6 +65,9 @@ python_version = "3.12"
 strict = true
 packages = ["valkyries"]
 
+[tool.vercel]
+entrypoint = "api.index:app"
+
 [[tool.mypy.overrides]]
 module = ["pandas", "pandas.*", "pymc", "pymc.*", "sklearn", "sklearn.*"]
 ignore_missing_imports = true
