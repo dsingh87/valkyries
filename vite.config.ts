@@ -55,5 +55,8 @@ export default defineConfig(async () => {
         config: localBindingConfig,
       }),
     ],
+    ssr: {
+      noExternal: ["@vercel/analytics"],
+    },
   };
 });
