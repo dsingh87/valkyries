@@ -47,3 +47,4 @@ def test_health_model_card_and_pages() -> None:
         response = client.get(path)
         assert response.status_code == 200
         assert "Valkyries Matchup Intelligence" in response.text
+        assert '<script defer src="/_vercel/insights/script.js"></script>' in response.text
