@@ -22,6 +22,7 @@ def test_api_and_dashboard_contracts(artifact_path: Path) -> None:
         assert health.json()["champion"] == "logistic"
         assert "Valkyries Game Pulse" in page.text
         assert "Win probability timeline" in page.text
+        assert '<script defer src="/_vercel/insights/script.js"></script>' in page.text
     finally:
         store.path = original
 
